@@ -1,3 +1,4 @@
+from uuid import uuid5, NAMESPACE_DNS
 from datetime import date
 from enum import Enum
 
@@ -6,17 +7,22 @@ class Book:
     class Errors(Enum):
         NoSuchAuthor = 0
 
+    def _generate_uuid(self):
+        self._uuid = uuid5(NAMESPACE_DNS, self._title)
+
     def __init__(self, title: str, authors: list[str], desc: str, published_date: date, price: float):
         self._title = title
         self._authors = authors
         self._desc = desc
         self._pub_date = published_date
         self._price = price
+        self._generate_uuid()
 
     # getters and setters
 
     def change_title(self, new_title: str) -> None:
         self._title = new_title
+        self._generate_uuid()
 
     def get_title(self) -> str:
         return self._title.title()
@@ -53,3 +59,6 @@ class Book:
 
     def get_price(self) -> float:
         return self._price
+
+    def get_id(self) -> str:
+        return str(self._uuid)
